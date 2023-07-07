@@ -1,11 +1,11 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, MouseEvent, useState } from 'react'
 import './App.css'
 
 function App() {
   //
   // EXEMPLE :
   //
-  // const people: string[] = ["Foo", "Bar", "Baz", "Random Person", "Another Random", "This guy", "That guy", "Tux", "Snake", "Pacman"]
+  // const people: string[] = ["Foo", "Bar", "Baz", "Random Person", "Another Random", "This guy", "That guy", "Tux", "Snake", "Pacman", "John", "Doe", "AnEvilStudent", "Hackathon24685", "User", "Your_Cat_Overlord"]
   //
 
   const people: string[] = []
@@ -16,13 +16,20 @@ function App() {
   const [mode, setMode] = useState<number>(1);
   const [nbRetries, setNbRetries] = useState<number>(1);
   const [generatedGroups, setGeneratedGroups] = useState<string[][][]>([]);
-  const retryModes = [2];
+  const retryModes: number[] = [2];
 
   const personInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setPersonInput(e.target.value);
   }
 
-  const setListHandler = () => {
+  const personDeleteHandler = (button: HTMLButtonElement) => {
+    const target: number = list.findIndex((person) => person === button.value);
+    const listCopy: string[] = [...list];
+    listCopy.splice(target, 1);
+    setList(() => [...listCopy])
+  }
+
+  const setListHandler = (): void => {
     if (personInput.trim() !== "") {
       setList(() => [...list, personInput])
       setPersonInput("");
@@ -92,10 +99,10 @@ function App() {
   return (
     <>
       <div className="listContainer group">
-        <ul>
+        <ul className="people-list">
           {list.map((person) => {
             return (
-              <li key={person}>{person}</li>
+              <li key={person}>{person} <button value={person} className="del-button" onClick={(e: MouseEvent<HTMLButtonElement>) => personDeleteHandler(e.target as HTMLButtonElement)} /></li>
             )
           })}
         </ul>

@@ -57,3 +57,32 @@ body {
   justify-content: space-evenly;
   background-color: var(--background);
 }
+
+.people-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.2rem;
+}
+
+.people-list li::before {
+  content: "❖";
+}
+
+.del-button {
+  position: relative;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+}
+
+.del-button::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: "❌";
+  font-size: 0.82rem;
+}
