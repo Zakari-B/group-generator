@@ -101,7 +101,7 @@ function App() {
         </ul>
         <div className="column">
           <label htmlFor="personInput">Add a victim ?</label>
-          <input id="personInput" type="text" value={personInput} onChange={(e: ChangeEvent<HTMLInputElement>) => personInputHandler(e)} />
+          <input id="personInput" type="text" value={personInput} onChange={(e: ChangeEvent<HTMLInputElement>) => personInputHandler(e)} onKeyDown={(e) => e.key === 'Enter' ? setListHandler() : null} />
           <button onClick={() => setListHandler()}>Add !</button>
         </div>
         <div className="column">
