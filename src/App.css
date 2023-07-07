@@ -1,0 +1,59 @@
+:root {
+  --background: rgb(55, 55, 55);
+}
+
+body {
+  background-color: var(--background);
+}
+
+#root {
+  margin: auto;
+  background-color: var(--background);
+}
+
+.group {
+  border: 1px solid white;
+  border-radius: 15px;
+  padding: 1rem;
+}
+
+.listContainer {
+  display: flex;
+  gap: 5rem;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.inputRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.inputRow > input {
+  width: 50px;
+}
+
+.resultBox {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: space-evenly;
+  justify-content: space-evenly;
+  background-color: rgba(100, 100, 100, 0.8);
+}
+
+.resultBox h2 {
+  margin: auto;
+}
+
+.generatedGroups {
+  display: flex;
+  align-items: space-evenly;
+  justify-content: space-evenly;
+  background-color: var(--background);
+}
