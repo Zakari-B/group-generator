@@ -22,6 +22,13 @@ function App() {
     setPersonInput(e.target.value);
   }
 
+  const setListHandler = () => {
+    if (personInput.trim() !== "") {
+      setList(() => [...list, personInput])
+      setPersonInput("");
+    }
+  }
+
   const nbGroupHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setNbGroup(parseInt(e.target.value));
   }
@@ -95,7 +102,7 @@ function App() {
         <div className="column">
           <label htmlFor="personInput">Add a victim ?</label>
           <input id="personInput" type="text" value={personInput} onChange={(e: ChangeEvent<HTMLInputElement>) => personInputHandler(e)} />
-          <button onClick={() => setList(() => [...list, personInput])}>Add !</button>
+          <button onClick={() => setListHandler()}>Add !</button>
         </div>
         <div className="column">
           <div className="inputRow">
