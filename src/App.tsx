@@ -5,10 +5,10 @@ function App() {
   //
   // EXEMPLE :
   //
-  const people: string[] = ["Foo", "Bar", "Baz", "Random Person", "Another Random", "This guy", "That guy", "Tux", "Snake", "Pacman"]
+  // const people: string[] = ["Foo", "Bar", "Baz", "Random Person", "Another Random", "This guy", "That guy", "Tux", "Snake", "Pacman"]
   //
 
-  // const people: string[] = []
+  const people: string[] = []
 
   const [list, setList] = useState<string[]>(people);
   const [personInput, setPersonInput] = useState<string>("");
