@@ -8,8 +8,10 @@ The default port the server will use is 3000, you can change that in the vite.co
 ## Usage
 
 In App.tsx, modify the content of the people const to reflect the team members you're trying to make groups with.  
-If you forget someone, you can also add them to the list directly on the website (however they won't be saved if you refresh the page).  
-Select the number of groups you want to make in the dropdown menu, select the method you want to use (descriptions below) and how many tries the algorithm should make (if you want the people to vote between different ways to split the groups for exemple).
+If you forget someone, you can also add them to the list directly on the website (however they won't be saved if you refresh the page).
+
+Run the project, then on your localhost select the number of groups you want to make in the dropdown menu.  
+Select the method you want to use (descriptions below) and how many tries the algorithm should make (if you want the people to vote between different ways to split the groups for exemple).
 
 > #### One by one
 >
