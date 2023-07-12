@@ -26,13 +26,24 @@ function App() {
     2: "low",
     3: "medium",
     4: "high",
-    5: "veryHigh"
+    5: "veryHigh",
   }
 
   const personDeleteHandler = (button: HTMLButtonElement) => {
     const target: number = list.findIndex((person) => (person.name === button.value.split("::")[0] && person.weight === parseInt(button.value.split("::")[1])));
     const listCopy: Person[] = [...list];
     listCopy.splice(target, 1);
+    setList(() => [...listCopy])
+  }
+
+  const weightChangeHandler = (select: ChangeEvent<HTMLSelectElement>) => {
+    if (select.target.getAttribute("data-target") == null) return;
+    const target: string = select.target.getAttribute("data-target") as string
+
+    const listCopy: Person[] = [...list];
+    const listTarget: number = listCopy.findIndex((person) => (person.name === target.split("::")[0] && person.weight === parseInt(target.split("::")[1])));
+
+    listCopy[listTarget] = { ...listCopy[listTarget], weight: parseInt(select.target.value) }
     setList(() => [...listCopy])
   }
 
@@ -204,7 +215,15 @@ function App() {
         <ul className="people-list">
           {list.map((person) => {
             return (
-              <li className={showWeight ? weights[person.weight] : ''} key={person.name}>{person.name} {showWeight ? person.weight : null}<button value={person.name + "::" + person.weight} className="del-button" onClick={(e: MouseEvent<HTMLButtonElement>) => personDeleteHandler(e.target as HTMLButtonElement)} /></li>
+              <li className={showWeight ? weights[person.weight] : ''} key={person.name}>{person.name} {showWeight ?
+                (
+                  <select value={person.weight} data-target={person.name + "::" + person.weight} onChange={(e) => weightChangeHandler(e)} id="modeInput">
+                    {[...Array(Object.keys(weights).length)].map((x, i) =>
+                      <option key={"weight" + i + 1} value={i + 1}>{i + 1}</option>
+                    )}
+                  </select>
+                ) : null}
+              </li>
             )
           })}
         </ul>
@@ -217,7 +236,7 @@ function App() {
             <select value={personInput.weight} onChange={
               (e: ChangeEvent<HTMLSelectElement>) => setPersonInput({ ...personInput, weight: parseInt(e.target.value) })
             } id="modeInput">
-              {[...Array(5)].map((x, i) =>
+              {[...Array(Object.keys(weights).length)].map((x, i) =>
                 <option key={"weight" + i + 1} value={i + 1}>{i + 1}</option>
               )}
             </select>
