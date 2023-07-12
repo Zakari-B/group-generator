@@ -86,3 +86,19 @@ body {
   content: "❌";
   font-size: 0.82rem;
 }
+
+.veryLow {
+  color: rgb(200, 15, 15);
+}
+.low {
+  color: rgb(200, 100, 15);
+}
+.medium {
+  color: rgb(200, 160, 15);
+}
+.high {
+  color: rgb(175, 200, 50);
+}
+.veryHigh {
+  color: rgb(90, 200, 50);
+}
