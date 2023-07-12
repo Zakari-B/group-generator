@@ -223,6 +223,7 @@ function App() {
                     )}
                   </select>
                 ) : null}
+                <button value={person.name + "::" + person.weight} className="del-button" onClick={(e: MouseEvent<HTMLButtonElement>) => personDeleteHandler(e.target as HTMLButtonElement)} />
               </li>
             )
           })}
