@@ -21,6 +21,10 @@ Select the method you want to use (descriptions below) and how many tries the al
 >
 > Get a random member, and distribute him/her randomly to any of the groups with the least members of people (for example if group A has 3 people already while groupe B and C have 2, the person will be sent randomly to B or C).
 >
+> #### Weighted
+>
+> Uses the individuals' weight (how you evaluate that individual's ability relative to the task you're making groups for) to distribute them equally between groups.
+>
 > #### Get a random person
 >
 > Self-explanatory, if you just need to select one random person among your list.
