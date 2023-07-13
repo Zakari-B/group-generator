@@ -14,17 +14,18 @@ function App() {
 
   //
   // EXEMPLE :
+  //  
+  // const people: Person[] = [
+  //   { name: "Foo", weight: 2 }, { name: "Bar", weight: 1 }, { name: "Baz", weight: 5 },
+  //   { name: "Random Person", weight: 3 }, { name: "Another Random", weight: 4 },
+  //   { name: "This guy", weight: 2 }, { name: "That guy", weight: 3 },
+  //   { name: "Tux", weight: 1 }, { name: "Snake", weight: 5 }, { name: "Pacman", weight: 3 },
+  //   { name: "John", weight: 2 }, { name: "Doe", weight: 2 }, { name: "AnEvilStudent", weight: 1 },
+  //   { name: "Hackathon24685", weight: 4 }, { name: "User", weight: 3 }, { name: "Your_Cat_Overlord", weight: 5 }
+  // ]
   //
-  // const people: Person[] = [{ name: "Foo", weight: 2 }, { name: "Bar", weight: 1 }, { name: "Baz", weight: 5 }, { name: "Random Person", weight: 3 }, { name: "Another Random", weight: 4 }, { name: "This guy", weight: 2 }, { name: "That guy", weight: 3 }, { name: "Tux", weight: 1 }, { name: "Snake", weight: 5 }, { name: "Pacman", weight: 3 }, { name: "John", weight: 2 }, { name: "Doe", weight: 2 }, { name: "AnEvilStudent", weight: 1 }, { name: "Hackathon24685", weight: 4 }, { name: "User", weight: 3 }, { name: "Your_Cat_Overlord", weight: 5 }]
-  //
-  const people: Person[] = [
-    { name: "Foo", weight: 2 }, { name: "Bar", weight: 1 }, { name: "Baz", weight: 5 },
-    { name: "Random Person", weight: 3 }, { name: "Another Random", weight: 4 },
-    { name: "This guy", weight: 2 }, { name: "That guy", weight: 3 },
-    { name: "Tux", weight: 1 }, { name: "Snake", weight: 5 }, { name: "Pacman", weight: 3 },
-    { name: "John", weight: 2 }, { name: "Doe", weight: 2 }, { name: "AnEvilStudent", weight: 1 },
-    { name: "Hackathon24685", weight: 4 }, { name: "User", weight: 3 }, { name: "Your_Cat_Overlord", weight: 5 }
-  ]
+
+  const people: Person[] = [];
 
 
   const [error, setError] = useState<Error | null>(null);
