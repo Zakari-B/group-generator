@@ -356,8 +356,8 @@ function App() {
             <input type="checkbox" id="weightCheckbox" defaultChecked={showWeight} onChange={() => setShowWeight(() => !showWeight)} />
           </div>
           <label className="dropZone" htmlFor="fileInput">
-            <p><span>Cliquez ici</span> ou <span>faites glisser un fichier</span> pour importer des données</p>
-            <p><i>(Formats autorisés : CSV)</i></p>
+            <p><span>Click here</span> or <span>drag and drop a file</span> to import data</p>
+            <p><i>(Allowed formats : .csv)</i></p>
             <input id="fileInput" type="file"
               onChange={(e) => {
                 e.target.files ? readFile(e.target.files[0]) : null;
