@@ -1,20 +1,38 @@
-import { ChangeEvent, MouseEvent, useState } from 'react'
+import { ChangeEvent, MouseEvent, useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
-  //
-  // EXEMPLE :
-  //
-  // const people: Person[] = [{ name: "Foo", weight: 2 }, { name: "Bar", weight: 1 }, { name: "Baz", weight: 5 }, { name: "Random Person", weight: 3 }, { name: "Another Random", weight: 4 }, { name: "This guy", weight: 2 }, { name: "That guy", weight: 3 }, { name: "Tux", weight: 1 }, { name: "Snake", weight: 5 }, { name: "Pacman", weight: 3 }, { name: "John", weight: 2 }, { name: "Doe", weight: 2 }, { name: "AnEvilStudent", weight: 1 }, { name: "Hackathon24685", weight: 4 }, { name: "User", weight: 3 }, { name: "Your_Cat_Overlord", weight: 5 }]
-  //
   type Person = {
     name: string,
     weight: number
   }
-  const people: Person[] = [{ name: "Foo", weight: 2 }, { name: "Bar", weight: 1 }, { name: "Baz", weight: 5 }, { name: "Random Person", weight: 3 }, { name: "Another Random", weight: 4 }, { name: "This guy", weight: 2 }, { name: "That guy", weight: 3 }, { name: "Tux", weight: 1 }, { name: "Snake", weight: 5 }, { name: "Pacman", weight: 3 }, { name: "John", weight: 2 }, { name: "Doe", weight: 2 }, { name: "AnEvilStudent", weight: 1 }, { name: "Hackathon24685", weight: 4 }, { name: "User", weight: 3 }, { name: "Your_Cat_Overlord", weight: 5 }]
+  type FileContent = {
+    ext: string,
+    content: string
+  }
 
+
+  //
+  // EXEMPLE :
+  //  
+  // const people: Person[] = [
+  //   { name: "Foo", weight: 2 }, { name: "Bar", weight: 1 }, { name: "Baz", weight: 5 },
+  //   { name: "Random Person", weight: 3 }, { name: "Another Random", weight: 4 },
+  //   { name: "This guy", weight: 2 }, { name: "That guy", weight: 3 },
+  //   { name: "Tux", weight: 1 }, { name: "Snake", weight: 5 }, { name: "Pacman", weight: 3 },
+  //   { name: "John", weight: 2 }, { name: "Doe", weight: 2 }, { name: "AnEvilStudent", weight: 1 },
+  //   { name: "Hackathon24685", weight: 4 }, { name: "User", weight: 3 }, { name: "Your_Cat_Overlord", weight: 5 }
+  // ]
+  //
+
+  const people: Person[] = [];
+
+
+  const [error, setError] = useState<Error | null>(null);
+  const [errorDisplayed, isErrorDisplayed] = useState<boolean>(false);
+  const [fileContents, setFileContents] = useState<FileContent | null>(null);
   const [list, setList] = useState<Person[]>(people);
-  const [personInput, setPersonInput] = useState<Person>({ name: "", weight: 1 });
+  const [personInput, setPersonInput] = useState<Person>({ name: "", weight: 3 });
   const [nbGroup, setNbGroup] = useState<number>(3);
   const [mode, setMode] = useState<number>(1);
   const [nbRetries, setNbRetries] = useState<number>(1);
@@ -28,6 +46,9 @@ function App() {
     4: "high",
     5: "veryHigh",
   }
+  const ALLOWED_MIME_TYPES = [
+    "text/csv"
+  ]
 
   const personDeleteHandler = (button: HTMLButtonElement) => {
     const target: number = list.findIndex((person) => (person.name === button.value.split("::")[0] && person.weight === parseInt(button.value.split("::")[1])));
@@ -50,7 +71,7 @@ function App() {
   const setListHandler = (): void => {
     if (personInput.name.trim() !== "" && personInput.weight > 0 && personInput.weight <= 5) {
       setList(() => [...list, personInput])
-      setPersonInput({ name: "", weight: 1 });
+      setPersonInput({ name: "", weight: 3 });
     }
   }
 
@@ -209,6 +230,93 @@ function App() {
     setGeneratedGroups(() => tempArray)
   }
 
+  const fileParse = async (fileContent: FileContent | null) => {
+    if (fileContent == null) return;
+    try {
+      if (fileContent.ext === "csv") {
+        try {
+          // Split the file into separate rows and drop the empty ones
+          const rows = fileContent.content.split("\n");
+          const cleanedRows = rows.filter((row) => row.trim() !== "")
+          // Get the CSV headers
+          const headers = cleanedRows[0].split(",");
+          // Possible keys that might contain the firstname of the person, add the firstname key here if necessar
+          const firstnameKeys = ["fname", "firstname", "prenom", "prénom"]
+          // Try to find if that key exists in our CSV
+          let firstnameIndex: number | null = null;
+          for (let i = 0; i < headers.length; i++) {
+            if (firstnameKeys.includes(headers[i])) {
+              firstnameIndex = i;
+            }
+            // Break separately : in case we need to extract more fields later, we'll check if all of them have been found before exiting the loop
+            if (firstnameIndex != null) break;
+          }
+          // If no key has been found, Error
+          if (firstnameIndex == null) {
+            const err = new Error("Names not found while parsing this file.");
+            setError(() => err as Error)
+            return;
+          }
+          // Start creating the new list of people to display using a default weight of 3
+          const personList: Person[] = [];
+          for (let j = 1; j <= cleanedRows.length - 1; j++) {
+            const person = { name: cleanedRows[j].split(",")[firstnameIndex], weight: 3 }
+            personList.push(person);
+          }
+          setList(() => personList)
+        } catch (err) {
+          setError(() => err as Error)
+        }
+      }
+      else {
+        const err = new TypeError("Unable to parse this file")
+        setError(() => err)
+      }
+    } catch (err) {
+      setError(() => err as Error)
+    }
+  }
+
+
+  const readFile = (file: File) => {
+    const fileExt = file.name.slice(file.name.lastIndexOf('.') + 1).toLowerCase();
+    const security = file.name.indexOf('.exe.')
+    if (security !== -1) {
+      const err = new Error("Dangerous file detected")
+      setError(() => err)
+      return;
+    }
+    if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+      const err = new TypeError("This type of file is not supported")
+      setError(() => err)
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = () => {
+      setFileContents({ ext: fileExt, content: reader.result as string });
+    };
+    reader.onerror = () => {
+      throw new Error("An error occurred while reading this file")
+    };
+  }
+
+  useEffect(() => {
+    fileParse(fileContents)
+  }, [fileContents]);
+
+  useEffect(() => {
+    if (error != null) {
+      isErrorDisplayed(() => true);
+      setTimeout(() => {
+        isErrorDisplayed(() => false);
+        setError(null);
+      }, 3000)
+    }
+  }, [error])
+
+
   return (
     <>
       <div className="listContainer group">
@@ -247,6 +355,41 @@ function App() {
             <label htmlFor="weightCheckbox">Show weights ?</label>
             <input type="checkbox" id="weightCheckbox" defaultChecked={showWeight} onChange={() => setShowWeight(() => !showWeight)} />
           </div>
+          <label className="dropZone" htmlFor="fileInput">
+            <p><span>Click here</span> or <span>drag and drop a file</span> to import data</p>
+            <p><i>(Allowed formats : .csv)</i></p>
+            <input id="fileInput" type="file"
+              onChange={(e) => {
+                e.target.files ? readFile(e.target.files[0]) : null;
+                e.target.value = "";
+              }}
+              onDragOver={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                e.dataTransfer.dropEffect = "copy";
+              }}
+              onDragEnter={(e) => {
+                const target = e.target as HTMLInputElement;
+                (target.parentElement as HTMLLabelElement).classList.add("fileHover")
+              }}
+              onDragLeave={(e) => {
+                const target = e.target as HTMLInputElement;
+                (target.parentElement as HTMLLabelElement).classList.remove("fileHover")
+              }}
+              onDrop={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                const target = e.target as HTMLInputElement;
+                (target.parentElement as HTMLLabelElement).classList.contains("fileHover") ? (target.parentElement as HTMLLabelElement).classList.remove("fileHover") : null;
+                readFile(e.dataTransfer.files[0])
+              }}
+            />
+          </label>
+          {errorDisplayed && error?.message ?
+            <div className="errorBox">
+              <p>{error?.message}</p>
+            </div>
+            : null}
         </div>
         <div className="column">
           <div className="inputRow">
